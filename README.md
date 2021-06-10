@@ -7,9 +7,9 @@ Se creó la clase DHServer, la cual se encarga de crear una conexión con un cli
 
 ## 2.	Dificultades del proyecto.
 
-a.	Desconocimiento del paquete de encriptación de Java.
-b.	“Race condition”.
-c.	Entendimiento del algoritmo Diffie-Hellman.
+- Desconocimiento del paquete de encriptación de Java.
+- “Race condition”.
+- Entendimiento del algoritmo Diffie-Hellman.
 
 ## 3.	Conclusiones.
 
