@@ -24,6 +24,13 @@ public class DHClient {
 	
 	private byte aesKey[];
 	
+ /**
+     * Constructor del DHClient Se encarga de generar las llaves publicas y privadas
+     * usando DH y asignar la llave a usar el algoritmo aes
+     * @param IP direccion ip del server socket
+     * @param port El puerto por el que se va a crear el socket
+     * @throws Exception
+     */
 	public DHClient(String IP, int port) throws Exception {
 		socket = new Socket(IP, port);
 		
@@ -68,11 +75,21 @@ public class DHClient {
 		aesKey = Arrays.copyOf(serverSharedSecret, 16);
 	}
 	
+	/**
+	 * Este metodo se encargarga de enviar el mensaje encriptado al servidor
+	 * @param toSend string con el mensaje a enviar
+	 * @throws Exception
+	 */
 	public void send(String toSend) throws Exception {
 		os.write(encrypt(toSend.getBytes("UTF-8"), aesKey));
 		os.flush();
 	}
 	
+	/**
+	 * Este metodo se encarga de recibir el mensaje enviado del servidor y desencriptarlo
+	 * @return retorna un string con el mensaje encriptado
+	 * @throws Exception
+	 */
 	public String receive() throws Exception {
 		byte formServer[] = new byte[4096];
 		int bytesRead = is.read(formServer);
@@ -81,6 +98,14 @@ public class DHClient {
 		return new String(decrypt(exactFromServer, aesKey));
 	}
 	
+	/**
+	 * Este metodo se encarga de encriptar un arreglo de bytes (mensaje)
+	 * usando el algoritmo aes con la llave generada por DH
+	 * @param bytesToEncrypt arreglo de bytes que representa el mensaje a encriptar
+	 * @param key llave generada con DH
+	 * @return retorna el mensaje encriptado en un arreglo de bytes
+	 * @throws Exception
+	 */
 	public static byte[] encrypt(byte bytesToEncrypt[], byte key[]) throws Exception {
 		Key secretKeySpec = new SecretKeySpec(key, "AES");
 		Cipher cipher = Cipher.getInstance("AES");
@@ -89,6 +114,14 @@ public class DHClient {
 		return cipher.doFinal(bytesToEncrypt);
 	}
 
+	/**
+	 * Este metodo se encarga de desencriptar un arreglo de bytes (mensaje)
+	 * usando el algoritmo aes con la llave generada por DH
+	 * @param bytesToDecrypt arreglo de bytes que representa el mensaje a desencriptar
+	 * @param key llave generada con DH
+	 * @return retorna el mensaje desencriptado en un arreglo de bytes
+	 * @throws Exception
+	 */
 	public static byte[] decrypt(byte bytesToDecrypt[], byte key[]) throws Exception {
 		Key secretKeySpec = new SecretKeySpec(key, "AES");
 		Cipher cipher = Cipher.getInstance("AES");
